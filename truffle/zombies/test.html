@@ -1,65 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
     <title>CryptoZombies front-end</title>
     <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script language="javascript" type="text/javascript" src="web3.min.js"></script>
-    <title>Document</title>
+    <script language="javascript" type="text/javascript" src="cryptozombies_abi.js"></script>
   </head>
   <body>
+    <div id="txStatus"></div>
+    <div id="zombies"></div>
+
     <script>
-      //     // 下面是调用合约的方式:
-      // var abi; /* abi是由编译器生成的 */
-      // var ZombieFactoryContract = web3.eth.contract(abi)
-      // var contractAddress; /* 发布之后在以太坊上生成的合约地址 */
-      // var ZombieFactory = ZombieFactoryContract.at(contractAddress)
-      // // `ZombieFactory` 能访问公共的函数以及事件
+      var cryptoZombies;
+      var userAccount;
 
-      // // 某个监听文本输入的监听器:
-      // $("#ourButton").click(function(e) {
-      //   var name = $("#nameInput").val()
-      //   //调用合约的 `createRandomZombie` 函数:
-      //   ZombieFactory.createRandomZombie(name)
-      // })
+      function startApp() {
+        var cryptoZombiesAddress = "YOUR_CONTRACT_ADDRESS";
+        cryptoZombies = new web3js.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
 
-      // // 监听 `NewZombie` 事件, 并且更新UI
-      // var event = ZombieFactory.NewZombie(function(error, result) {
-      //   if (error) return
-      //   generateZombie(result.zombieId, result.name, result.dna)
-      // })
+        var accountInterval = setInterval(function() {
+          // Check if account has changed
+          if (web3.eth.accounts[0] !== userAccount) {
+            userAccount = web3.eth.accounts[0];
+            // Call a function to update the UI with the new account
+            getZombiesByOwner(userAccount)
+            .then(displayZombies);
+          }
+        }, 100);
 
-      // // 获取 Zombie 的 dna, 更新图像
-      // function generateZombie(id, name, dna) {
-      //   let dnaStr = String(dna)
-      //   // 如果dna少于16位,在它前面用0补上
-      //   while (dnaStr.length < 16)
-      //     dnaStr = "0" + dnaStr
+        // Start here
+        var web3Infura = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws"));
+        var czEvents = new web3Infura.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
+      }
 
-      //   let zombieDetails = {
-      //     // 前两位数构成头部.我们可能有7种头部, 所以 % 7
-      //     // 得到的数在0-6,再加上1,数的范围变成1-7
-      //     // 通过这样计算：
-      //     headChoice: dnaStr.substring(0, 2) % 7 + 1，
-      //     // 我们得到的图片名称从head1.png 到 head7.png
+      function displayZombies(ids) {
+        $("#zombies").empty();
+        for (id of ids) {
+          // Look up zombie details from our contract. Returns a `zombie` object
+          getZombieDetails(id)
+          .then(function(zombie) {
+            // Using ES6's "template literals" to inject variables into the HTML.
+            // Append each one to our #zombies div
+            $("#zombies").append(`<div class="zombie">
+              <ul>
+                <li>Name: ${zombie.name}</li>
+                <li>DNA: ${zombie.dna}</li>
+                <li>Level: ${zombie.level}</li>
+                <li>Wins: ${zombie.winCount}</li>
+                <li>Losses: ${zombie.lossCount}</li>
+                <li>Ready Time: ${zombie.readyTime}</li>
+              </ul>
+            </div>`);
+          });
+        }
+      }
 
-      //     // 接下来的两位数构成眼睛, 眼睛变化就对11取模:
-      //     eyeChoice: dnaStr.substring(2, 4) % 11 + 1,
-      //     // 再接下来的两位数构成衣服，衣服变化就对6取模:
-      //     shirtChoice: dnaStr.substring(4, 6) % 6 + 1,
-      //     //最后6位控制颜色. 用css选择器: hue-rotate来更新
-      //     // 360度:
-      //     skinColorChoice: parseInt(dnaStr.substring(6, 8) / 100 * 360),
-      //     eyeColorChoice: parseInt(dnaStr.substring(8, 10) / 100 * 360),
-      //     clothesColorChoice: parseInt(dnaStr.substring(10, 12) / 100 * 360),
-      //     zombieName: name,
-      //     zombieDescription: "A Level 1 CryptoZombie",
-      //   }
-      //   return zombieDetails
-      // }
-      var web3 = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws"));
+      function createRandomZombie(name) {
+        // This is going to take a while, so update the UI to let the user know
+        // the transaction has been sent
+        $("#txStatus").text("Creating new zombie on the blockchain. This may take a while...");
+        // Send the tx to our contract:
+        return cryptoZombies.methods.createRandomZombie(name)
+        .send({ from: userAccount })
+        .on("receipt", function(receipt) {
+          $("#txStatus").text("Successfully created " + name + "!");
+          // Transaction was accepted into the blockchain, let's redraw the UI
+          getZombiesByOwner(userAccount).then(displayZombies);
+        })
+        .on("error", function(error) {
+          // Do something to alert the user their transaction has failed
+          $("#txStatus").text(error);
+        });
+      }
+
+      function feedOnKitty(zombieId, kittyId) {
+        $("#txStatus").text("Eating a kitty. This may take a while...");
+        return cryptoZombies.methods.feedOnKitty(zombieId, kittyId)
+        .send({ from: userAccount })
+        .on("receipt", function(receipt) {
+          $("#txStatus").text("Ate a kitty and spawned a new Zombie!");
+          getZombiesByOwner(userAccount).then(displayZombies);
+        })
+        .on("error", function(error) {
+          $("#txStatus").text(error);
+        });
+      }
+
+      function levelUp(zombieId) {
+        $("#txStatus").text("Leveling up your zombie...");
+        return cryptoZombies.methods.levelUp(zombieId)
+        .send({ from: userAccount, value: web3.utils.toWei("0.001", "ether") })
+        .on("receipt", function(receipt) {
+          $("#txStatus").text("Power overwhelming! Zombie successfully leveled up");
+        })
+        .on("error", function(error) {
+          $("#txStatus").text(error);
+        });
+      }
+
+      function getZombieDetails(id) {
+        return cryptoZombies.methods.zombies(id).call()
+      }
+
+      function zombieToOwner(id) {
+        return cryptoZombies.methods.zombieToOwner(id).call()
+      }
+
+      function getZombiesByOwner(owner) {
+        return cryptoZombies.methods.getZombiesByOwner(owner).call()
+      }
+
+      window.addEventListener('load', function() {
+
+        // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+        if (typeof web3 !== 'undefined') {
+          // Use Mist/MetaMask's provider
+          web3js = new Web3(web3.currentProvider);
+        } else {
+          // Handle the case where the user doesn't have Metamask installed
+          // Probably show them a message prompting them to install Metamask
+        }
+
+        // Now you can start your app & access web3 freely:
+        startApp()
+        
+      })
     </script>
   </body>
 </html>

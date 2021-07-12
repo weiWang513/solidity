@@ -1,6 +1,7 @@
 {
   "name": "MetaCoin",
   "dependencies": {
+    "truffle-hdwallet-provider": "^1.0.17",
     "truffle-plugin-hello": "^1.0.1"
   },
   "version": "0.0.1"

@@ -1,15 +1,15 @@
 {
   "contractName": "ContractTwo",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/wangwei/truffle/MetaCoin/contracts/contracts.sol\":\"ContractTwo\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/wangwei/truffle/MetaCoin/contracts/contracts.sol\":{\"keccak256\":\"0xd3dedc99b67838bef727701be154149021519f8870552d1244933a1628f90209\",\"urls\":[\"bzz-raw://62067bbd0d2026b7a697523649eeb3a026966cf472dff7a4f7e84229b454a2db\",\"dweb:/ipfs/QmR3nDooKAhCvPoykVLFxigkSXj3xHWfYZSCw3taYVvDLX\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a723158204c9db608ba361a2f1d248051163c33520dfe90f35d1ecf4817c7eb183d74146e64736f6c63430005100032",
-  "deployedBytecode": "0x6080604052600080fdfea265627a7a723158204c9db608ba361a2f1d248051163c33520dfe90f35d1ecf4817c7eb183d74146e64736f6c63430005100032",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/wangwei/solidity/truffle/MetaCoin/contracts/contracts.sol\":\"ContractTwo\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/wangwei/solidity/truffle/MetaCoin/contracts/contracts.sol\":{\"keccak256\":\"0xd3dedc99b67838bef727701be154149021519f8870552d1244933a1628f90209\",\"urls\":[\"bzz-raw://62067bbd0d2026b7a697523649eeb3a026966cf472dff7a4f7e84229b454a2db\",\"dweb:/ipfs/QmR3nDooKAhCvPoykVLFxigkSXj3xHWfYZSCw3taYVvDLX\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a72315820d30a69da9f96c211455f76c36b2a26d692df5b4fc8c85461272917b589c5ab6c64736f6c63430005100032",
+  "deployedBytecode": "0x6080604052600080fdfea265627a7a72315820d30a69da9f96c211455f76c36b2a26d692df5b4fc8c85461272917b589c5ab6c64736f6c63430005100032",
   "sourceMap": "61:25:3:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;61:25:3;;;;;;;",
   "deployedSourceMap": "61:25:3:-;;;;;",
   "source": "pragma solidity >=0.4.25 <0.7.0;\ncontract ContractOne {\n  \n}\ncontract ContractTwo {\n\n}",
-  "sourcePath": "/Users/wangwei/truffle/MetaCoin/contracts/contracts.sol",
+  "sourcePath": "/Users/wangwei/solidity/truffle/MetaCoin/contracts/contracts.sol",
   "ast": {
-    "absolutePath": "/Users/wangwei/truffle/MetaCoin/contracts/contracts.sol",
+    "absolutePath": "/Users/wangwei/solidity/truffle/MetaCoin/contracts/contracts.sol",
     "exportedSymbols": {
       "ContractOne": [
         152
@@ -72,7 +72,7 @@
   },
   "legacyAST": {
     "attributes": {
-      "absolutePath": "/Users/wangwei/truffle/MetaCoin/contracts/contracts.sol",
+      "absolutePath": "/Users/wangwei/solidity/truffle/MetaCoin/contracts/contracts.sol",
       "exportedSymbols": {
         "ContractOne": [
           152
@@ -165,7 +165,7 @@
     }
   },
   "schemaVersion": "3.4.0",
-  "updatedAt": "2021-05-06T08:51:52.286Z",
+  "updatedAt": "2021-05-26T23:29:50.046Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
