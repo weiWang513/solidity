@@ -1,12 +1,12 @@
 pragma solidity >=0.4.21 <=0.6.0;
-import './Owned';
+import './Owned.sol';
 interface token {
   function transfer (address receiver, uint amount) external returns(bool);
   function transferFrom(address from, address to, uint amount) external returns(bool);
   function balanceOf(address account) external view returns(uint);
 }
 
-contract LotteryCoin is Owned {
+contract LotteryCoin is owned {
   token public tokenReward;
   bool public closed;
 
@@ -91,7 +91,7 @@ contract LotteryCoin is Owned {
 
     tokenReward.transferFrom(address(this), currentWinner, reward);
 
-    emit GetWinner(currentWinner, allWinners, fee, reward);
+    emit GetWinner(currentWinner, allWinners.length, fee, reward);
   }
 
   function random() private view returns(address) {

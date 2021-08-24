@@ -4,6 +4,15 @@ contract Voting{
   mapping (bytes32=>uint8) public votesReceived;
   // 候选人列表
   bytes32[] public candidateList;
+  modifier validCandidate(bytes32 _candidate) {
+    for (uint256 i = 0; i < candidateList.length; i++) {
+      if(candidateList[i] == candidate) {
+        return true;
+      }
+      return false;
+    }
+    _
+  }
   // 投票的构造函数
   constructor (bytes32[] memory candidateNames) public {
     candidateList = candidateNames;

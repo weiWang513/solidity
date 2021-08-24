@@ -24,7 +24,6 @@ const App = {
           shop_artifacts.abi,
           shop_artifacts.networks[networkId].address,
       );
-
       this.loadBasicInfo();
     } catch (error) {
       console.error("Could not connect to contract or chain.");

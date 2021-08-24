@@ -49,7 +49,7 @@ contract LotteryShop is owned{
         emit Bet(msg.sender, betStr, sum);
     }
 
-    function allMyBets()public view returns (bytes3[] memory, uint256[] memory, bool, address){
+    function allMyBets()public view returns (bytes3[] memory, uint256[] memory, bool, address, address){
         BetItem[] memory myBets = betForUser[msg.sender];
 
         uint length = myBets.length;
@@ -62,7 +62,7 @@ contract LotteryShop is owned{
             nos[i] = (item.betNo);
         }
 
-        return (strs, nos, closed, currentWinner);
+        return (strs, nos, closed, currentWinner, address(this));
     }
 
     function myCurrentBetTimes() public view returns (uint){
@@ -96,7 +96,7 @@ contract LotteryShop is owned{
 
         uint rewards =  tokenReward.balanceOf(address(this));
 
-        tokenReward.transferFrom(address(this), currentWinner, fee);
+        tokenReward.transferFrom(address(this), currentWinner, rewards);
 
         emit GetWinner(currentWinner, allWinners.length, fee, rewards);
     }

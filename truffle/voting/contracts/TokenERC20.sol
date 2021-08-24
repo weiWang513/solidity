@@ -45,7 +45,7 @@ contract TokenERC20 {
   }
 
   function transfer(address _to, uint _value) public returns(bool success) {
-    _tansfer(msg.sender, _to, _value);
+    _transfer(msg.sender, _to, _value);
     return true;
   }
 
@@ -65,16 +65,16 @@ contract TokenERC20 {
   function approveAndCall(address _spender, uint256 _value, bytes memory _extraData) public returns (bool success) {
     tokenRecipient spender = tokenRecipient(_spender);
     if(approve(_spender, _value)) {
-      spender.receiveApproval(_from, _value, _token, _extraData);
+      spender.receiveApproval(msg.sender, _value, address(this), _extraData);
       return true;
     }
   }
 
   function burn(uint256 _value) public returns (bool success) {
-    require(balanceOf[msg.sender] >= _value);
-    balanceOf[msg.sender] -= _value;
-    totalSupply -= _value;
-    emit Burn(msg.sneder, _value);
+    require(balanceOf[msg.sender] >= _value);   // Check if the sender has enough
+    balanceOf[msg.sender] -= _value;            // Subtract from the sender
+    totalSupply -= _value;                      // Updates totalSupply
+    emit Burn(msg.sender, _value);
     return true;
   }
 

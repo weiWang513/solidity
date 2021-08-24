@@ -1,8 +1,8 @@
 pragma solidity >=0.4.21 <=0.6.0;
-import './Owned';
-import './TokenERC20';
+import './Owned.sol';
+import './TokenERC20.sol';
 
-contract LotteryCoin is Owned, TokenERC20 {
+contract LotteryCoin is owned, TokenERC20 {
   uint256 public sellPrice;
   uint256 public buyPrice;
 
@@ -48,8 +48,8 @@ contract LotteryCoin is Owned, TokenERC20 {
     _transfer(address(this), msg.sender, amount);
   }
 
-  function sell() payable public {
-    address myAddress = addres(this);
+  function sell(uint256 a) payable public {
+    address myAddress = address(this);
     uint256 amount = a * 10 ** uint256(decimals);
     require(myAddress.balance >= amount * sellPrice);
     _transfer(msg.sender, address(this), amount);
